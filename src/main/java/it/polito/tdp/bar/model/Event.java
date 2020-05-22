@@ -1,6 +1,6 @@
 package it.polito.tdp.bar.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class Event implements Comparable<Event> {
 
@@ -8,19 +8,19 @@ public class Event implements Comparable<Event> {
 		NEW_CLIENT, CLIENT_SERVED
 	}
 
-	private LocalTime time;
+	private LocalDateTime time;
 	private EventType type;
 	private int dimensioneTavoloRichiesta;
 	private int dimensioneTavoloMassima;
 
-	public Event(LocalTime time, EventType type, int dimensioneTavoloRichiesta) {
+	public Event(LocalDateTime time, EventType type, int dimensioneTavoloRichiesta) {
 		this.time = time;
 		this.type = type;
 		this.dimensioneTavoloRichiesta = dimensioneTavoloRichiesta;
 		this.dimensioneTavoloMassima = (int) (this.dimensioneTavoloRichiesta * 2);
 	}
 
-	public LocalTime getTime() {
+	public LocalDateTime getTime() {
 		return time;
 	}
 

@@ -1,6 +1,7 @@
 package it.polito.tdp.bar.model;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -12,7 +13,6 @@ import it.polito.tdp.bar.model.Event.EventType;
 public class Simulator {
 
 	public Simulator() {
-		popolaTavoli();
 	}
 
 	// CODA DEGLI EVENTI
@@ -66,21 +66,23 @@ public class Simulator {
 
 	// SIMULAZIONE VERA E PROPRIA
 	public void run() {
+		popolaTavoli();
+
 		this.numeroTotaleClienti = 0;
 		this.numeroClientiSoddisfatti = 0;
 		this.numeroClientiInsoddisfatti = 0;
 
 		this.coda.clear();
 
-		LocalTime ora = LocalTime.now();
+		LocalDateTime ora = LocalDateTime.now();
 		Event e = new Event(ora, EventType.NEW_CLIENT, getNumPersone());
 		this.coda.add(e);
 
 		do {
 			processEvent(this.coda.poll());
-//			ora = ora.plus(getIntervallo());
-//			Event nuovo = new Event(ora, EventType.NEW_CLIENT, getNumPersone());
-//			this.coda.add(nuovo);
+			ora = ora.plus(getIntervallo());
+			Event nuovo = new Event(ora, EventType.NEW_CLIENT, getNumPersone());
+			this.coda.add(nuovo);
 		} while (numeroTotaleClienti != totEventi);
 	}
 
@@ -88,14 +90,14 @@ public class Simulator {
 		switch (e.getType()) {
 		case NEW_CLIENT:
 			numeroTotaleClienti++;
-			LocalTime arrivo = e.getTime().plus(getIntervallo());
-			Event nuovoo = new Event(arrivo, EventType.NEW_CLIENT, getNumPersone());
-			this.coda.add(nuovoo);
+//			LocalDateTime arrivo = e.getTime().plus(getIntervallo());
+//			Event nuovoo = new Event(arrivo, EventType.NEW_CLIENT, getNumPersone());
+//			this.coda.add(nuovoo);
 			// Tavolo libero?
 			int tavoloOccupato = tavoloLibero(e.getDimensioneTavoloMassima(), e.getDimensioneTavoloRichiesta());
 			if (tavoloOccupato > 0) { // -1 se non assegno il tavolo
 				numeroClientiSoddisfatti++;
-				LocalTime fine = e.getTime().plus(getDurata());
+				LocalDateTime fine = e.getTime().plus(getDurata());
 				Event nuovo = new Event(fine, EventType.CLIENT_SERVED, tavoloOccupato);
 				this.coda.add(nuovo);
 			}
